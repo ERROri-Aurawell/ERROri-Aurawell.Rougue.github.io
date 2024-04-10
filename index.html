@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Interface</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #output {
+            flex-grow: 1;
+            max-height: calc(100vh - 200px);
+            /* Reduzido para acomodar o footer */
+            overflow-y: scroll;
+        }
+
+        footer {
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
+            /* Sombra na parte superior */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #submit {
+            margin-left: 10px;
+            /* Adiciona margem entre o botão e o input */
+        }
+
+        #use-once {
+            margin-bottom: 10px;
+            /* Adiciona margem abaixo do botão de uso único */
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Rouguelike</h1>
+    </header>
+
+    <button id="use-once">Uso Único</button> <!-- Botão de Uso Único -->
+
+    <div id="output"></div>
+
+    <footer>
+        <input type="text" id="input">
+        <button id="submit">Submit</button>
+    </footer>
+
+    <script  type="module" src="back-end/index.js"></script>
+
+
+</body>
+
+</html>
