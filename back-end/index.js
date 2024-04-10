@@ -98,7 +98,7 @@ function criarInimigo1() {
         inimigoAtual = Object.assign({}, inimigosTier1[indice]);
     }
     if (inimigoAtual == null || inimigoAtual.vivo == false) {
-        addToOutput("Deu algo de errado..");
+        alert("Deu algo de errado..");
         criarInimigo1();
     }
     inimigoAtual.cooldown = false;
@@ -111,7 +111,7 @@ function criarInimigo2() {
         inimigoAtual = Object.assign({}, inimigosTier2[indice]);
     }
     if (inimigoAtual == null || inimigoAtual.vivo == false) {
-        addToOutput("Deu algo de errado...");
+        alert("Deu algo de errado...");
         criarInimigo2();
     }
     inimigoAtual.cooldown = false;
@@ -132,6 +132,10 @@ function criarInimigo3() {
 
 console.log("TierInimigo");
 function tierInimigo() {
+    //Apaga o inimigo atual
+    inimigoAtual = null;
+
+    //Verifica o quão forte o inimigo vai ser
     if (inimigosMortos <= 3) {
         criarInimigo1();
     } else if (inimigosMortos <= 8) {
@@ -139,14 +143,14 @@ function tierInimigo() {
     } else if (inimigosMortos <= 15) {
         criarInimigo3();
     } else {
-        addToOutput("Jogo chegou no final atual!");
+        alert("Jogo chegou no final atual!");
         inimigosMortos = 0;
         tierInimigo();
     }
 }
 
 console.log("tomarDano");
-function tomarDano() {
+async function tomarDano() {
     if (inimigoAtual.vivo == true) {
         if (inimigoAtual.cooldown == false) {
             jogador.escudoAtual -= inimigoAtual.dano;
@@ -155,14 +159,16 @@ function tomarDano() {
                 bladeAcumulos();
             }
         } else {
-            menu2();
+           await menu2();
         }
     }
 }
 
 // Função para realizar o ataque
 async function darDano() {
-    addToOutput(`Pontos de perícia: ${pericia}\n1 - Ataque básico\n2 - Ataque forte`);
+    addToOutput(`Pontos de perícia: ${pericia}`);
+    addToOutput("1 - Ataque básico");
+    addToOutput("2 - Ataque forte");
     addToOutput("Digite o tipo de ataque: ");
     const acao = await entradaDados(); // Espera pela entrada do jogador
 
@@ -175,7 +181,7 @@ async function darDano() {
         --pericia;
         inimigoAtual.vida -= jogador.dano * 2;
     } else {
-        addToOutput("Ação desconhecida!");
+        alert("Ação desconhecida!");
         await darDano(); // Chama novamente a função em caso de ação desconhecida
         return;
     }
@@ -189,16 +195,14 @@ async function darDano() {
     }
 }
 
-console.log("Fugir");
 function fugir() {
     tomarDano();
     inimigoAtual = null;
     tierInimigo();
 }
 
-console.log("menu");
 async function menu() {
-    addToOutput("1 - Atacar \n2 - Defender \n3 - Fugir \n4 - Nada\n5 - Fechar\n6 - Recuperar HP");
+    addToOutput("1-Atacar \n2-Defender \n3-Fugir \n4-Nada \n5-Sepuku \n6-Recuperar HP");
     addToOutput("Digite sua ação: ");
     const acao = await entradaDados(); // Aguarda a entrada do jogador
     if (acao === "1") {
@@ -208,19 +212,18 @@ async function menu() {
     } else if (acao === "3") {
         fugir();
     } else if (acao === '4') {
-        addToOutput("");
+        addToOutput("Fazendo grandes nada!");
     } else if (acao === '5') {
         jogoRodando = false;
     } else if (acao === '6' || !cooldownCura) {
         recuperarVida();
         cooldownCura = true;
     } else {
-        addToOutput("Ação desconhecida!");
+        alert("Ação desconhecida!");
         await menu(); // Volta a exibir o menu
     }
 }
 
-console.log("menu2");
 async function menu2() {
     jogador.escudoAtual -= Math.ceil(inimigoAtual.dano / 3);
     jogador.perderVida();
@@ -229,23 +232,30 @@ async function menu2() {
     cooldownCura = false;
     addToOutput(`Rodada: ${rodadas}`);
     addToOutput("Inimigo Atordoado!");
-    addToOutput("1 - Atacar \n2 - Fugir \n3 - Fechar");
+    addToOutput("1-Atacar \n2-Fugir \n3-Fechar \n4-Nada");
     addToOutput("Digite sua ação: ");
     let acao = await entradaDados();
     if (acao == "1") {
         await darDano();
     } else if (acao == "2") {
         fugir();
-    } else {
+    } else if (acao == "3"){
         jogoRodando = false;
+    }else if (acao == "4") {
+        addToOutput("Fazendo grandes nada!");
+    }else{
+        alert("Ação inválida!");
     }
     inimigoAtual.cooldown = false;
 }
 
 console.log("jogadorStatus");
 function jogadorStatus() {
-    addToOutput(`Nome: ${jogador.nome}\nVida: ${jogador.vida}\nDano: ${jogador.dano}`);
-    addToOutput(`Escudo: ${jogador.escudoAtual}\nGamemode: ${jogador.gamemode}`);
+    addToOutput(`Nome: ${jogador.nome}`);
+    addToOutput(`Vida: ${jogador.vida}`);
+    addToOutput(`Dano: ${jogador.dano}`);
+    addToOutput(`Escudo: ${jogador.escudoAtual}`);
+    addToOutput(`Gamemode: ${jogador.gamemode}`)
     if (jogador.nome == "Blade") {
         addToOutput(`Acumulos: ${jogador.acumulos}`)
     }
@@ -254,7 +264,9 @@ function jogadorStatus() {
 
 console.log("inimigoStatus");
 function inimigoStatus() {
-    addToOutput(`===Inimigo===\nNome: ${inimigoAtual.nome}\nVida: ${inimigoAtual.vida}`);
+    addToOutput(`===Inimigo===`);
+    addToOutput(`Nome: ${inimigoAtual.nome}`);
+    addToOutput(`Vida: ${inimigoAtual.vida}`);
 }
 
 console.log("colocarPontos");
@@ -323,7 +335,7 @@ async function colocarPontos() {
             pontosExtras = 41;
             break;
         default:
-            addToOutput("!!!--------Deu algo de errado...--------!!!");
+            alert("!!!--------Deu algo de errado...--------!!!");
             break;
     }
     pontosColocados = false;
@@ -346,7 +358,7 @@ async function colocarPontos() {
             verificarEscudo < 0 ||
             verificarVida < 0
         ) {
-            addToOutput("---====---Pontuação inválida!---====---");
+            alert("---====---Pontuação inválida!---====---");
         } else if (verificarDano == 0 && verificarEscudo == 0 && verificarVida == 0 && cheatCode == true && jogador.gamemode != "normal") {
             addToOutput("===---===Enter code===---===\n: ");
             addToOutput("");
@@ -369,7 +381,7 @@ async function colocarPontos() {
                     break
                 default:
                     addToOutput("");
-                    addToOutput("---====---Código inválido!---====---")
+                    alert("---====---Código inválido!---====---");
                     cheatCode = false;
                     break;
             }
@@ -379,7 +391,7 @@ async function colocarPontos() {
                 verificarEscudo > inimigosMortos * 5) &&
             jogador.nome != "Blade"
         ) {
-            addToOutput("")
+            addToOutput("");
             addToOutput("Pontuação excede limite máximo atual: " + inimigosMortos * 5);
         } else {
             jogador.vida += verificarVida;
@@ -569,7 +581,7 @@ async function criarJogador() {
                 let verificarEscudo = parseInt(await entradaDados());
 
                 if (verificarDano + verificarEscudo + verificarVida > 20 || verificarDano < 0 || verificarEscudo < 0 || verificarVida <= 0) {
-                    addToOutput("Pontuação inválida!");
+                   alert("Pontuação inválida!");
                 } else {
                     jogador.vida = verificarVida;
                     jogador.dano = verificarDano;
