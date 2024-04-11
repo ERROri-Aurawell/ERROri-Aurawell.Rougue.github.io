@@ -1,9 +1,10 @@
 body {
     margin: 0;
-    padding: 20px;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background-color: darkgray;
+    text-align: center;
 }
 
 #output {
@@ -15,12 +16,13 @@ body {
 
 footer {
     padding: 10px;
-    background-color: #fff;
+    background-color: darkgray;
     box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
     /* Sombra na parte superior */
     display: flex;
     align-items: center;
     justify-content: center;
+
 }
 
 #submit {
@@ -31,4 +33,9 @@ footer {
 #use-once {
     margin-bottom: 10px;
     /* Adiciona margem abaixo do botão de uso único */
+}
+header{
+    background-color: gray;
+    margin: 0;
+    border: 0;
 }
