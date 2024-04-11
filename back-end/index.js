@@ -375,17 +375,17 @@ async function colocarPontos() {
             addToOutput("");
             let codigo = await handleEntradaDados();
             switch (codigo) {
-                case 5795:
+                case "5795":
                     addToOutput("Pontos: ")
                     pontosExtras = parseInt(await handleEntradaDados());
                     cheatCode = false;
                     break;
-                case 9756:
+                case "9756":
                     addToOutput("Vida: ")
                     jogador.vida = parseInt(await handleEntradaDados());
                     cheatCode = false;
                     break
-                case 1111:
+                case "1111":
                     addToOutput("Dano: ");
                     jogador.dano = parseInt(await handleEntradaDados());
                     cheatCode = false;
