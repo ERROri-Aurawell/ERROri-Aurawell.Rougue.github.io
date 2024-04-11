@@ -171,15 +171,23 @@ async function darDano() {
     addToOutput("2 - Ataque forte");
     addToOutput("Digite o tipo de ataque: ");
     const acao = await entradaDados(); // Espera pela entrada do jogador
+    console.log(acao);
 
     if (acao == "1") {
         inimigoAtual.vida -= jogador.dano;
         if (pericia < 5) {
             ++pericia;
         }
-    } else if (acao == "2" && pericia >= 1) {
-        --pericia;
-        inimigoAtual.vida -= jogador.dano * 2;
+    } else if (acao == "2") {
+        if (!(pericia > 0) ){
+            addToOutput("Pontos de perícia insuficientes!");
+            darDano();
+        }else{
+            --pericia;
+            console.log(inimigoAtual.vida -= jogador.dano * 2);
+            inimigoAtual.vida -= jogador.dano * 2;
+        }
+
     } else {
         alert("Ação desconhecida!");
         await darDano(); // Chama novamente a função em caso de ação desconhecida
