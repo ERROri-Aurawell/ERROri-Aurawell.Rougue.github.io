@@ -463,11 +463,19 @@ async function iniciarJogo() {
 
             //música xandão 
             if ((jogador.dano || jogador.vida || jogador.escudoTotal) >= 1000) {
-                console.log("entrou na música");
-                tocarMusica = true; 
-            tocarMusicas();
-        }
-
+                if (jogador.gamemode == "Big Xande" || jogador.gamemode == "normal") {
+                    console.log("entrou na música Xandão");
+                    tocarMusica = true;
+                    tocarXandao();
+                }
+            }
+            //música AlienX
+            console.log(jogador.gamemode);
+            if (jogador.gamemode == "God Mode" || jogador.gamemode == "Dev Mode") {
+                console.log("entrou na música AlienX");
+                tocarMusica = true;
+                tocarAlienX();
+            }
 
             if (inimigoAtual.vivo) {
                 if (jogador.vivo || jogador.nome === "Blade") {
@@ -620,17 +628,26 @@ async function criarJogador() {
     }
 }
 
-function tocarMusicas() {
+function tocarXandao() {
     console.log(tocarMusica);
 
-    if (tocarMusica == true){
+    if (tocarMusica == true) {
 
         console.log(jogador.nome);
-        if (jogador.nome != "Xandão"){
+        if (jogador.nome != "Xandão") {
             jogador.gamemode = "Big Xande (paraguai)";
             addToOutput("====== Poder grandioso atingido! ======");
         }
         let audioElement = document.getElementById('xandao');
+        audioElement.play();
+    }
+}
+function tocarAlienX() {
+    console.log(tocarMusica);
+
+    if (tocarMusica == true) {
+        addToOutput("====== Poder EXTRA grandioso atingido! ======");
+        let audioElement = document.getElementById('alienX');
         audioElement.play();
     }
 }
