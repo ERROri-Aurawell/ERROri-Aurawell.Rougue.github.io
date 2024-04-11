@@ -1,3 +1,6 @@
+let frase1 = "";
+let frase2 = "";
+
 class Usuario {
   constructor(nome) {
     this.nome = nome;
@@ -12,10 +15,10 @@ class Usuario {
 
   morte() {
     if (this.nome === "Blade") {
-      return "A morte se afasta...";
+      frase2 = "A morte se afasta...";
     } else {
       this.vivo = false;
-      return "Game over!";
+      frase2 = "Game over!";
     }
   }
 
@@ -23,7 +26,10 @@ class Usuario {
     if (this.vida > 0) {
       if (this.nome != "Blade") { this.vivo = true }
 
-    } else this.morte();
+    }else {
+      let frase = this.morte();
+      return frase;
+    }
   }
 
   perderVida() {
@@ -35,10 +41,12 @@ class Usuario {
         this.escudoAtual = 0;
         this.verificarVivo();
         return "...";
-      } else {
-        this.escudoAtual = 0;
+
+      }else {
         this.verificarVivo();
-        return "Aih, tomei " + (-this.escudoAtual) + " de dano!";
+        frase1 = "Aih, tomei " + (-this.escudoAtual) + " de dano!";
+        this.escudoAtual = 0;
+        return [frase1, frase2];
       }
     }
   }

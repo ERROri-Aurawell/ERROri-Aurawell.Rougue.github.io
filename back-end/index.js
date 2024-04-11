@@ -150,7 +150,12 @@ async function tomarDano() {
         if (inimigoAtual.cooldown == false) {
             jogador.escudoAtual -= inimigoAtual.dano;
             if (jogador.escudoAtual < 0) {
-                jogador.perderVida();
+                let [frase1, frase2] = jogador.perderVida();
+                addToOutput(frase1);
+                if (jogador.vivo == false){
+                    addToOutput(frase2);
+                }
+
                 bladeAcumulos();
             }
         } else {
@@ -209,7 +214,8 @@ function fugir() {
 }
 
 async function menu() {
-    addToOutput("1-Atacar \n2-Defender \n3-Fugir \n4-Nada \n5-Sepuku \n6-Recuperar HP");
+    addToOutput("------------------------");
+    addToOutput("1-Atacar   2-Defender   3-Fugir   4-Nada   5-Sepuku   6-Recuperar HP");
     addToOutput("Digite sua ação: ");
     const acao = await handleEntradaDados(); // Aguarda a entrada do jogador
     if (acao === "1") {
@@ -237,9 +243,10 @@ async function menu2() {
     jogadorStatus();
     rodadas++;
     cooldownCura = false;
+    addToOutput("------------------------");
     addToOutput(`Rodada: ${rodadas}`);
     addToOutput("Inimigo Atordoado!");
-    addToOutput("1-Atacar \n2-Fugir \n3-Fechar \n4-Nada");
+    addToOutput("1-Atacar   \n2-Fugir    \n3-Fechar    \n4-Nada");
     addToOutput("Digite sua ação: ");
     let acao = await handleEntradaDados();
     if (acao == "1") {
@@ -480,6 +487,7 @@ async function iniciarJogo() {
             }
             regenEscudo();
         }
+        addToOutput("Acabou por aqui!");
     } catch (error) {
         console.error(error); // Exibe o erro no console
     }
