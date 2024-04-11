@@ -4,8 +4,6 @@ const inputElement = document.getElementById('input');
 const submitButton = document.getElementById('submit');
 const useOnceButton = document.getElementById('use-once');
 
-let botaoApertado = false;
-
 // Função para adicionar mensagem ao output
 function addToOutput(message) {
     // Cria um novo parágrafo
@@ -462,8 +460,10 @@ async function iniciarJogo() {
         // Loop principal do jogo
         while (jogoRodando) {
             console.log("loop");
+
             //música xandão 
-            if (jogador.dano || jogador.vida || jogador.escudoTotal >= 1000) {
+            if ((jogador.dano || jogador.vida || jogador.escudoTotal) >= 1000) {
+                console.log("entrou na música");
                 tocarMusica = true; 
             tocarMusicas();
         }
@@ -622,9 +622,13 @@ async function criarJogador() {
 
 function tocarMusicas() {
     console.log(tocarMusica);
+
     if (tocarMusica == true){
+
+        console.log(jogador.nome);
         if (jogador.nome != "Xandão"){
             jogador.gamemode = "Big Xande (paraguai)";
+            addToOutput("====== Poder grandioso atingido! ======");
         }
         let audioElement = document.getElementById('xandao');
         audioElement.play();
