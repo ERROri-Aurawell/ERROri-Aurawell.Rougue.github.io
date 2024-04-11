@@ -92,7 +92,6 @@ const inimigosTier3 = [inimigo15, inimigo16, inimigo17, inimigo18, inimigo19, in
 
 //Funções
 function criarInimigo1() {
-    console.log("CriarInimigo01");
     while (inimigoAtual == null || inimigoAtual.vivo == false) {
         let indice = aleatorio() % inimigosTier1.length;
         inimigoAtual = Object.assign({}, inimigosTier1[indice]);
@@ -104,7 +103,6 @@ function criarInimigo1() {
     inimigoAtual.cooldown = false;
 }
 
-console.log("CriarInimigo02");
 function criarInimigo2() {
     while (inimigoAtual == null || inimigoAtual.vivo == false) {
         let indice = aleatorio() % inimigosTier2.length;
@@ -117,7 +115,6 @@ function criarInimigo2() {
     inimigoAtual.cooldown = false;
 }
 
-console.log("CriarInimigo03");
 function criarInimigo3() {
     while (inimigoAtual == null || inimigoAtual.vivo == false) {
         let indice = aleatorio() % inimigosTier3.length;
@@ -130,7 +127,6 @@ function criarInimigo3() {
     inimigoAtual.cooldown = false;
 }
 
-console.log("TierInimigo");
 function tierInimigo() {
     //Apaga o inimigo atual
     inimigoAtual = null;
@@ -149,7 +145,6 @@ function tierInimigo() {
     }
 }
 
-console.log("tomarDano");
 async function tomarDano() {
     if (inimigoAtual.vivo == true) {
         if (inimigoAtual.cooldown == false) {
@@ -159,18 +154,19 @@ async function tomarDano() {
                 bladeAcumulos();
             }
         } else {
-           await menu2();
+            await menu2();
         }
     }
 }
 
 // Função para realizar o ataque
 async function darDano() {
+    addToOutput("---------------------------------");
     addToOutput(`Pontos de perícia: ${pericia}`);
     addToOutput("1 - Ataque básico");
     addToOutput("2 - Ataque forte");
     addToOutput("Digite o tipo de ataque: ");
-    const acao = await entradaDados(); // Espera pela entrada do jogador
+    const acao = await handleEntradaDados(); // Espera pela entrada do jogador
     console.log(acao);
 
     if (acao == "1") {
@@ -178,11 +174,13 @@ async function darDano() {
         if (pericia < 5) {
             ++pericia;
         }
-    } else if (acao == "2") {
-        if (!(pericia > 0) ){
+    }else if (acao == "2") {
+         if (pericia == 0) {
+            console.log("sem pontos de perícia!");
             addToOutput("Pontos de perícia insuficientes!");
-            darDano();
-        }else{
+           await darDano();
+
+        }else {
             --pericia;
             console.log(inimigoAtual.vida -= jogador.dano * 2);
             inimigoAtual.vida -= jogador.dano * 2;
@@ -196,6 +194,7 @@ async function darDano() {
 
     if (inimigoAtual.vida <= 0) {
         inimigoAtual.vivo = false;
+        addToOutput("---------------------");
         addToOutput("Inimigo derrotado!");
         inimigosMortos++;
         addToOutput(`Inimigos mortos: ${inimigosMortos}`);
@@ -212,7 +211,7 @@ function fugir() {
 async function menu() {
     addToOutput("1-Atacar \n2-Defender \n3-Fugir \n4-Nada \n5-Sepuku \n6-Recuperar HP");
     addToOutput("Digite sua ação: ");
-    const acao = await entradaDados(); // Aguarda a entrada do jogador
+    const acao = await handleEntradaDados(); // Aguarda a entrada do jogador
     if (acao === "1") {
         await darDano();
     } else if (acao === "2") {
@@ -242,22 +241,21 @@ async function menu2() {
     addToOutput("Inimigo Atordoado!");
     addToOutput("1-Atacar \n2-Fugir \n3-Fechar \n4-Nada");
     addToOutput("Digite sua ação: ");
-    let acao = await entradaDados();
+    let acao = await handleEntradaDados();
     if (acao == "1") {
         await darDano();
     } else if (acao == "2") {
         fugir();
-    } else if (acao == "3"){
+    } else if (acao == "3") {
         jogoRodando = false;
-    }else if (acao == "4") {
+    } else if (acao == "4") {
         addToOutput("Fazendo grandes nada!");
-    }else{
+    } else {
         alert("Ação inválida!");
     }
     inimigoAtual.cooldown = false;
 }
 
-console.log("jogadorStatus");
 function jogadorStatus() {
     addToOutput(`Nome: ${jogador.nome}`);
     addToOutput(`Vida: ${jogador.vida}`);
@@ -270,14 +268,12 @@ function jogadorStatus() {
     addToOutput("--------------------------------");
 }
 
-console.log("inimigoStatus");
 function inimigoStatus() {
     addToOutput(`===Inimigo===`);
     addToOutput(`Nome: ${inimigoAtual.nome}`);
     addToOutput(`Vida: ${inimigoAtual.vida}`);
 }
 
-console.log("colocarPontos");
 async function colocarPontos() {
     let cheatCode = true;
 
@@ -354,11 +350,11 @@ async function colocarPontos() {
         addToOutput('Max por atributo: ' + inimigosMortos * 5);
         addToOutput("");
         addToOutput("VIDA:");
-        let verificarVida = parseInt(await entradaDados());
+        let verificarVida = parseInt(await handleEntradaDados());
         addToOutput("DANO:")
-        let verificarDano = parseInt(await entradaDados());
+        let verificarDano = parseInt(await handleEntradaDados());
         addToOutput("ESCUDO:")
-        let verificarEscudo = parseInt(await entradaDados());
+        let verificarEscudo = parseInt(await handleEntradaDados());
 
         if (
             verificarDano + verificarEscudo + verificarVida > pontosExtras ||
@@ -370,21 +366,21 @@ async function colocarPontos() {
         } else if (verificarDano == 0 && verificarEscudo == 0 && verificarVida == 0 && cheatCode == true && jogador.gamemode != "normal") {
             addToOutput("===---===Enter code===---===\n: ");
             addToOutput("");
-            let codigo = await entradaDados();
+            let codigo = await handleEntradaDados();
             switch (codigo) {
                 case 5795:
                     addToOutput("Pontos: ")
-                    pontosExtras = parseInt(await entradaDados());
+                    pontosExtras = parseInt(await handleEntradaDados());
                     cheatCode = false;
                     break;
                 case 9756:
                     addToOutput("Vida: ")
-                    jogador.vida = parseInt(await entradaDados());
+                    jogador.vida = parseInt(await handleEntradaDados());
                     cheatCode = false;
                     break
                 case 1111:
                     addToOutput("Dano: ");
-                    jogador.dano = parseInt(await entradaDados());
+                    jogador.dano = parseInt(await handleEntradaDados());
                     cheatCode = false;
                     break
                 default:
@@ -412,7 +408,7 @@ async function colocarPontos() {
     pontosExtras = 0;
 }
 
-console.log("bladeAcumulos");
+
 async function bladeAcumulos() {
     if (jogador.acumulos == 5) {
         addToOutput("=-=-=-=-=\nA vale... to send you!\n=-=-=-=-=");
@@ -422,7 +418,7 @@ async function bladeAcumulos() {
     }
 }
 
-console.log("regenEscudo");
+
 function regenEscudo() {
     escudoAcumulos++;
 
@@ -433,7 +429,6 @@ function regenEscudo() {
     }
 }
 
-console.log("recuperarVida");
 function recuperarVida() {
     if (jogador.vivo == true) {
         jogador.vida += 5;
@@ -451,12 +446,12 @@ let jogador;
 
 // Função principal para iniciar o jogo
 async function iniciarJogo() {
-    // Aguarda o jogador inserir seu nome antes de criar o jogador
-    await criarJogador();
-    criarInimigo1();
+    try {
+        // Aguarda o jogador inserir seu nome antes de criar o jogador
+        await criarJogador();
+        criarInimigo1();
 
-    // Loop principal do jogo
-    (async function loopPrincipal() {
+        // Loop principal do jogo
         while (jogoRodando) {
             console.log("loop");
 
@@ -485,56 +480,49 @@ async function iniciarJogo() {
             }
             regenEscudo();
         }
-    })();
+    } catch (error) {
+        console.error(error); // Exibe o erro no console
+    }
 }
 
+//função propícia a ser modificada--------------------
 
-
-async function entradaDados() {
-    // Retorna uma nova promessa que resolve com os dados fornecidos pelo usuário
-
+async function EntradaDados() {
     return new Promise((resolve, reject) => {
-
-        // Função para lidar com o clique no botão de submit
         function handleClick() {
-
-            // Obtem o valor do input
-            let testeEntrada = inputElement.value.trim(); // Remova espaços em branco extras
-
-            // Verifica se há algo digitado
+            let testeEntrada = inputElement.value.trim();
+            console.log("----------------");
             console.log(testeEntrada);
-            console.log(typeof(testeEntrada));
+            console.log(typeof (testeEntrada));
+
             if (testeEntrada === '') {
-
-                // Se não houver entrada, rejeita a promessa com uma mensagem de erro
-                reject("Por favor, digite algo antes de pressionar o botão de submit. Eu ainda não fiz funcionar direito, cê bricou a página");
-
-            } else {
-                // Limpa o campo de entrada após o clique
+                alert("Por favor, digite algo antes de pressionar o botão de submit.");
                 inputElement.value = '';
-
-                // Remove o event listener após o clique
-                submitButton.removeEventListener('click', handleClick);
-
-                // Resolve a promessa com os dados fornecidos pelo usuário
+            } else {
                 resolve(testeEntrada);
+                inputElement.value = '';
+                submitButton.removeEventListener('click', handleClick); // Remove o manipulador de eventos
             }
         }
 
-        // Adiciona o event listener para o botão de submit
         submitButton.addEventListener('click', handleClick);
-    })
-    .catch((erro) => {
-        // Exibe uma mensagem de erro para o usuário
-        alert(erro);
     });
 }
 
+async function handleEntradaDados(){
+    let entrada;
+    do {
+        entrada = await EntradaDados();
+    } while (entrada === '');
+    return entrada;
+}
+
+//função acima propícia a ser modificada -------------------------------
 
 // Função para criar o jogador
 async function criarJogador() {
     addToOutput("Digite seu nome:");
-    const nome = await entradaDados(); // Aguarda o jogador inserir o nome
+    const nome = await handleEntradaDados(); // Aguarda o jogador inserir o nome
     jogador = new Usuario(nome);
 
     switch (jogador.nome) {
@@ -582,14 +570,14 @@ async function criarJogador() {
             while (pontosColocados == false) {
                 addToOutput("Digite seus pontos em VIDA, DANO e ESCUDO (20 pontos):");
                 addToOutput("VIDA:");
-                let verificarVida = parseInt(await entradaDados());
+                let verificarVida = parseInt(await handleEntradaDados());
                 addToOutput("DANO:");
-                let verificarDano = parseInt(await entradaDados());
+                let verificarDano = parseInt(await handleEntradaDados());
                 addToOutput("ESCUDO:");
-                let verificarEscudo = parseInt(await entradaDados());
+                let verificarEscudo = parseInt(await handleEntradaDados());
 
                 if (verificarDano + verificarEscudo + verificarVida > 20 || verificarDano < 0 || verificarEscudo < 0 || verificarVida <= 0) {
-                   alert("Pontuação inválida!");
+                    alert("Pontuação inválida!");
                 } else {
                     jogador.vida = verificarVida;
                     jogador.dano = verificarDano;
