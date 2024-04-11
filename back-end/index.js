@@ -47,6 +47,7 @@ let contadorCura = 0;
 let inimigosMortos = 0;
 let escudoAcumulos = 0;
 let pericia = 0;
+let tocarMusica = false;
 
 
 //Gerador aleatório
@@ -152,7 +153,7 @@ async function tomarDano() {
             if (jogador.escudoAtual < 0) {
                 let [frase1, frase2] = jogador.perderVida();
                 addToOutput(frase1);
-                if (jogador.vivo == false){
+                if (jogador.vivo == false) {
                     addToOutput(frase2);
                 }
 
@@ -179,13 +180,13 @@ async function darDano() {
         if (pericia < 5) {
             ++pericia;
         }
-    }else if (acao == "2") {
-         if (pericia == 0) {
+    } else if (acao == "2") {
+        if (pericia == 0) {
             console.log("sem pontos de perícia!");
             addToOutput("Pontos de perícia insuficientes!");
-           await darDano();
+            await darDano();
 
-        }else {
+        } else {
             --pericia;
             console.log(inimigoAtual.vida -= jogador.dano * 2);
             inimigoAtual.vida -= jogador.dano * 2;
@@ -461,6 +462,12 @@ async function iniciarJogo() {
         // Loop principal do jogo
         while (jogoRodando) {
             console.log("loop");
+            //música xandão 
+            if (jogador.dano || jogador.vida || jogador.escudoTotal >= 1000) {
+                tocarMusica = true; 
+            tocarMusicas();
+        }
+
 
             if (inimigoAtual.vivo) {
                 if (jogador.vivo || jogador.nome === "Blade") {
@@ -517,7 +524,7 @@ async function EntradaDados() {
     });
 }
 
-async function handleEntradaDados(){
+async function handleEntradaDados() {
     let entrada;
     do {
         entrada = await EntradaDados();
@@ -531,6 +538,8 @@ async function handleEntradaDados(){
 async function criarJogador() {
     addToOutput("Digite seu nome:");
     const nome = await handleEntradaDados(); // Aguarda o jogador inserir o nome
+    console.log(nome);
+
     jogador = new Usuario(nome);
 
     switch (jogador.nome) {
@@ -570,7 +579,18 @@ async function criarJogador() {
             jogador.dano = jogador.vida;
             jogador.escudoTotal = 0;
             jogador.escudoAtual = jogador.escudoTotal;
+            jogador.vivo = undefined;
             jogador.gamemode = "Imortal Mode";
+            jogador.acumulos = 0;
+            break;
+
+        case "Xandão":
+            jogador.vida = 1000;
+            jogador.dano = 1000;
+            jogador.escudoTotal = 1000;
+            jogador.escudoAtual = 1000;
+            jogador.vivo = true;
+            jogador.gamemode = "Big Xande"
             jogador.acumulos = 0;
             break;
 
@@ -600,6 +620,16 @@ async function criarJogador() {
     }
 }
 
+function tocarMusicas() {
+    console.log(tocarMusica);
+    if (tocarMusica == true){
+        if (jogador.nome != "Xandão"){
+            jogador.gamemode = "Big Xande (paraguai)";
+        }
+        let audioElement = document.getElementById('xandao');
+        audioElement.play();
+    }
+}
 //5795
 //9756
 //1111
