@@ -120,7 +120,7 @@ function criarInimigo3() {
         inimigoAtual = Object.assign({}, inimigosTier3[indice]);
     }
     if (inimigoAtual == null || inimigoAtual.vivo == false) {
-        addToOutput("Deu algo de errado...");
+        alert("Deu algo de errado...");
         criarInimigo3();
     }
     inimigoAtual.cooldown = false;
@@ -150,12 +150,15 @@ async function tomarDano() {
             jogador.escudoAtual -= inimigoAtual.dano;
             if (jogador.escudoAtual < 0) {
                 let [frase1, frase2] = jogador.perderVida();
+
+                console.log(frase1,frase2);
+
                 addToOutput(frase1);
                 if (jogador.vivo == false) {
                     addToOutput(frase2);
                 }
 
-                bladeAcumulos();
+                await bladeAcumulos();
             }
         } else {
             await menu2();
@@ -193,16 +196,17 @@ async function darDano() {
     } else {
         alert("Ação desconhecida!");
         await darDano(); // Chama novamente a função em caso de ação desconhecida
-        return;
     }
+    await matarInimigo();
 
+}
+async function matarInimigo(){
     if (inimigoAtual.vida <= 0) {
         inimigoAtual.vivo = false;
         addToOutput("---------------------");
         addToOutput("Inimigo derrotado!");
         inimigosMortos++;
         addToOutput(`Inimigos mortos: ${inimigosMortos}`);
-        await colocarPontos();
     }
 }
 
@@ -354,7 +358,7 @@ async function colocarPontos() {
         addToOutput("------------------------");
         addToOutput(`Ensira seus pontos ganhos (${pontosExtras}):`);
         addToOutput('Max por atributo: ' + inimigosMortos * 5);
-        addToOutput("");
+        addToOutput("");//----------------------------------------------
         addToOutput("VIDA:");
         let verificarVida = parseInt(await handleEntradaDados());
         addToOutput("DANO:")
@@ -417,10 +421,13 @@ async function colocarPontos() {
 
 async function bladeAcumulos() {
     if (jogador.acumulos == 5) {
-        addToOutput("=-=-=-=-=\nA vale... to send you!\n=-=-=-=-=");
-        recuperarVida();
-        await darDano();
+        addToOutput("=-=-=-=-=\n A vale... to send you!\n =-=-=-=-=");
         jogador.acumulos = 0;
+        recuperarVida();
+
+        inimigoAtual.vida -= jogador.dano * 2;
+        matarInimigo();
+        
     }
 }
 
@@ -498,9 +505,14 @@ async function iniciarJogo() {
                     tomarDano();
                 }
             } else {
+                await colocarPontos();
                 tierInimigo();
             }
-            regenEscudo();
+
+            if (jogador.vivo || jogador.nome == "Blade"){
+                regenEscudo();
+            }
+            
         }
         addToOutput("Acabou por aqui!");
     } catch (error) {
