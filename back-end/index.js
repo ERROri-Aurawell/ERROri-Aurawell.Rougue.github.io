@@ -386,11 +386,13 @@ async function colocarPontos() {
                 case "9756":
                     addToOutput("Vida: ")
                     jogador.vida = parseInt(await handleEntradaDados());
+                    console.log(jogador.vida, typeof(jogador.vida));
                     cheatCode = false;
                     break
                 case "1111":
                     addToOutput("Dano: ");
                     jogador.dano = parseInt(await handleEntradaDados());
+                    console.log(jogador.dano, typeof(jogador.dano));
                     cheatCode = false;
                     break
                 default:
