@@ -126,6 +126,21 @@ function criarInimigo3() {
     inimigoAtual.cooldown = false;
 }
 
+function criarInimigoInf(){
+    while (inimigoAtual == null || inimigoAtual.vivo == false){
+        let indice = aleatorio() % inimigosTier3.length;
+        inimigoAtual = Object.assign({}, inimigosTier3[indice]);
+        inimigoAtual.vida *= (rodadas + inimigosMortos);
+        inimigoAtual.dano *= (rodadas + inimigosMortos);
+
+    }
+    if (inimigoAtual == null || inimigoAtual.vivo == false) {
+        alert("Deu algo de errado...");
+        criarInimigoInf();
+    }
+    inimigoAtual.cooldown = false;
+}
+
 function tierInimigo() {
     //Apaga o inimigo atual
     inimigoAtual = null;
@@ -139,8 +154,7 @@ function tierInimigo() {
         criarInimigo3();
     } else {
         alert("Jogo chegou no final atual!");
-        inimigosMortos = 0;
-        tierInimigo();
+        criarInimigoInf();
     }
 }
 
@@ -480,11 +494,20 @@ async function iniciarJogo() {
             }
             //música AlienX
             console.log(jogador.gamemode);
-            if (jogador.gamemode == "God Mode" || jogador.gamemode == "Dev Mode") {
+            if (jogador.gamemode == "Dev Mode") {
                 console.log("entrou na música AlienX");
                 tocarMusica = true;
                 tocarAlienX();
             }
+            //música RodolfoX
+            console.log(jogador.gamemode);
+            if (jogador.gamemode == "God Mode") {
+                console.log("entrou na música RodolfoX");
+                tocarMusica = true;
+                tocarRodolfoX();
+            }
+
+
 
             if (inimigoAtual.vivo) {
                 if (jogador.vivo || jogador.nome === "Blade") {
@@ -662,6 +685,14 @@ function tocarAlienX() {
     if (tocarMusica == true) {
         addToOutput("====== Poder EXTRA grandioso atingido! ======");
         let audioElement = document.getElementById('alienX');
+        audioElement.play();
+    }
+}
+function tocarRodolfoX(){
+    console.log(tocarMusica);
+    if (tocarMusica == true) {
+        addToOutput("====== Poder EXTRA EXTREMO grandioso atingido! ======");
+        let audioElement = document.getElementById('rodolfoX');
         audioElement.play();
     }
 }
