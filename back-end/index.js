@@ -47,6 +47,7 @@ let escudoAcumulos = 0;
 let pericia = 0;
 let tocarMusica = false;
 let admKey = null;
+let musicaTocada = false;
 
 
 //Gerador aleatório
@@ -231,24 +232,63 @@ function fugir() {
     tierInimigo();
 }
 
+async function admMenu() {
+    addToOutput("----------------");
+    addToOutput("1- Rodada      2- Inm Mortos       3- Trocar inimigo       4- Fechar menu");
+    addToOutput("Digite sua ação: ");
+    const acao = await handleEntradaDados(); // Aguarda a entrada do jogador
+
+    if (acao == "1") {
+        addToOutput("Rodada: ");
+        rodadas = parseInt(await handleEntradaDados());
+
+    } else if (acao == "2") {
+        addToOutput("Inimigos Mortos: ");
+        inimigosMortos = parseInt(await handleEntradaDados());
+    }else if (acao == "3"){
+        addToOutput("Trocar Inimigo");
+        tierInimigo();
+
+    }else if (acao == "4"){
+        addToOutput("Adm menu fechado");
+
+    }else{
+        await admMenu();
+    }
+
+    await menu();
+}
+
 async function menu() {
     addToOutput("------------------------");
     addToOutput("1-Atacar   2-Defender   3-Fugir   4-Nada   5-Sepuku   6-Recuperar HP");
+    if (jogador.nome == "Aurawell") {
+        addToOutput("7 - Adm menu");
+    }
     addToOutput("Digite sua ação: ");
     const acao = await handleEntradaDados(); // Aguarda a entrada do jogador
     if (acao === "1") {
         await darDano();
+
     } else if (acao === "2") {
         inimigoAtual.cooldown = true;
+
     } else if (acao === "3") {
         fugir();
+
     } else if (acao === '4') {
         addToOutput("Fazendo grandes nada!");
+
     } else if (acao === '5') {
         jogoRodando = false;
+
     } else if (acao === '6' || !cooldownCura) {
         recuperarVida();
         cooldownCura = true;
+
+    }else if (acao === '7' && (jogador.nome == "Aurawell")) {
+        await admMenu(); 
+
     } else {
         alert("Ação desconhecida!");
         await menu(); // Volta a exibir o menu
@@ -486,26 +526,29 @@ async function iniciarJogo() {
             console.log("loop");
 
             //música xandão 
-            if ((jogador.dano || jogador.vida || jogador.escudoTotal) >= 1000) {
+            if ((jogador.dano || jogador.vida || jogador.escudoTotal ) >= 1000 && musicaTocada == false) {
                 if (jogador.gamemode == "Big Xande" || jogador.gamemode == "normal") {
                     console.log("entrou na música Xandão");
                     tocarMusica = true;
                     tocarXandao();
+                    musicaTocada = true;
                 }
             }
             //música AlienX
             console.log(jogador.gamemode);
-            if (jogador.gamemode == "Dev Mode") {
+            if (jogador.gamemode == "Dev Mode" && musicaTocada == false) {
                 console.log("entrou na música AlienX");
                 tocarMusica = true;
                 tocarAlienX();
+                musicaTocada = true;
             }
             //música RodolfoX
             console.log(jogador.gamemode);
-            if (jogador.gamemode == "God Mode") {
+            if (jogador.gamemode == "God Mode" && musicaTocada == false) {
                 console.log("entrou na música RodolfoX");
                 tocarMusica = true;
                 tocarRodolfoX();
+                musicaTocada = true;
             }
 
 
@@ -725,3 +768,4 @@ function tocarRodolfoX(){
 //5795
 //9756
 //1111
+//700162
