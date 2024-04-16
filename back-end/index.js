@@ -234,7 +234,7 @@ function fugir() {
 
 async function admMenu() {
     addToOutput("----------------");
-    addToOutput("1- Rodada      2- Inm Mortos       3- Trocar inimigo       4- Fechar menu");
+    addToOutput("1- Rodada      2- Inm Mortos       3- Trocar inimigo       4- Fechar menu      5- Fake Nome");
     addToOutput("Digite sua ação: ");
     const acao = await handleEntradaDados(); // Aguarda a entrada do jogador
 
@@ -252,6 +252,9 @@ async function admMenu() {
     }else if (acao == "4"){
         addToOutput("Adm menu fechado");
 
+    } else if (acao == "5") {
+        addToOutput("Fakenome: ");
+        jogador.fakenome = await handleEntradaDados();
     }else{
         await admMenu();
     }
@@ -323,11 +326,14 @@ async function menu2() {
 
 function jogadorStatus() {
     addToOutput(`Nome: ${jogador.nome}`);
+    if (jogador.nome == "Aurawell") {
+        addToOutput(`Nome fake: ${jogador.fakenome}`)
+    }
     addToOutput(`Vida: ${jogador.vida}`);
     addToOutput(`Dano: ${jogador.dano}`);
     addToOutput(`Escudo: ${jogador.escudoAtual}`);
     addToOutput(`Gamemode: ${jogador.gamemode}`)
-    if (jogador.nome == "Blade") {
+    if (jogador.nome == "Blade" || jogador.fakeNome == "Blade") {
         addToOutput(`Acumulos: ${jogador.acumulos}`)
     }
     addToOutput("--------------------------------");
@@ -460,7 +466,7 @@ async function colocarPontos() {
             (verificarVida > inimigosMortos * 5 ||
                 verificarDano > inimigosMortos * 5 ||
                 verificarEscudo > inimigosMortos * 5) &&
-            jogador.nome != "Blade"
+            (jogador.nome != "Blade" || jogador.fakeNome != "Blade")
         ) {
             addToOutput("");
             addToOutput("Pontuação excede limite máximo atual: " + inimigosMortos * 5);
@@ -500,11 +506,11 @@ function regenEscudo() {
 }
 
 function recuperarVida() {
-    if (jogador.vivo == true) {
+    if (jogador.vivo == true && jogador.fakeNome != "Blade") {
         jogador.vida += 5;
         addToOutput("---------------------");
         addToOutput("HP recuperado!");
-    } else if (jogador.nome == "Blade") {
+    } else if (jogador.nome == "Blade" || jogador.fakeNome == "Blade") {
         jogador.vida += 15;
         jogador.dano += 5;
         addToOutput("---------------------");
@@ -656,26 +662,28 @@ async function criarJogador() {
                 break;
 
             }else{
-                jogador.vida = 9223372036854775807;
-                jogador.dano = 9223372036854775807;
-                jogador.escudoTotal = 9223372036854775807;
+                jogador.vida = 10000;
+                jogador.dano = 10000;
+                jogador.escudoTotal = 10000;
                 jogador.escudoAtual = jogador.escudoTotal;
                 jogador.vivo = true;
                 jogador.gamemode = "Dev Mode";
                 jogador.acumulos = 0;
+                jogador.fakeNome = "Nenhum";
                 break;
             }
             
 
         case "RDLF":
         case "Rodolfo":
-            jogador.vida = 4294967295;
-            jogador.dano = 4294967295;
-            jogador.escudoTotal = 4294967295;
+            jogador.vida = 5000;
+            jogador.dano = 5000;
+            jogador.escudoTotal = 5000;
             jogador.escudoAtual = jogador.escudoTotal;
             jogador.vivo = true;
             jogador.gamemode = "God Mode";
             jogador.acumulos = 0;
+            jogador.fakeNome = "Nenhum";
             break;
 
         case "sim":
@@ -686,6 +694,7 @@ async function criarJogador() {
             jogador.vivo = true;
             jogador.gamemode = "Test Mode";
             jogador.acumulos = 0;
+            jogador.fakeNome = "Nenhum";
             break;
 
         case "Blade":
@@ -696,6 +705,7 @@ async function criarJogador() {
             jogador.vivo = undefined;
             jogador.gamemode = "Imortal Mode";
             jogador.acumulos = 0;
+            jogador.fakeNome = "Nenhum";
             break;
 
         case "Xandão":
@@ -706,6 +716,7 @@ async function criarJogador() {
             jogador.vivo = true;
             jogador.gamemode = "Big Xande"
             jogador.acumulos = 0;
+            jogador.fakeNome = "Nenhum";
             break;
 
         default:

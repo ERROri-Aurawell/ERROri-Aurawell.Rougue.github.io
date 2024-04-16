@@ -12,9 +12,10 @@ class Usuario {
   gamemode;
   vivo;
   acumulos;
+  fakeNome;
 
   morte() {
-    if (this.nome === "Blade") {
+    if (this.nome === "Blade" || this.fakeNome === "Blade") {
       frase2 = "A morte se afasta...";
     } else {
       this.vivo = false;
