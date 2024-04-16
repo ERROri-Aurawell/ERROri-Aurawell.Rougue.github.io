@@ -46,6 +46,7 @@ let inimigosMortos = 0;
 let escudoAcumulos = 0;
 let pericia = 0;
 let tocarMusica = false;
+let admKey = null;
 
 
 //Gerador aleatório
@@ -579,6 +580,18 @@ async function handleEntradaDados() {
 
 //função acima propícia a ser modificada -------------------------------
 
+async function admKeyUnloak(){
+    if (admKey === null) {
+        admKey = await handleEntradaDados();
+
+        return admKey;
+
+    }else{
+        addToOutput("Tentativa esgotada");
+        return "";
+    }
+}
+
 // Função para criar o jogador
 async function criarJogador() {
     addToOutput("Digite seu nome:");
@@ -589,14 +602,27 @@ async function criarJogador() {
 
     switch (jogador.nome) {
         case "Aurawell":
-            jogador.vida = 9223372036854775807;
-            jogador.dano = 9223372036854775807;
-            jogador.escudoTotal = 9223372036854775807;
-            jogador.escudoAtual = jogador.escudoTotal;
-            jogador.vivo = true;
-            jogador.gamemode = "Dev Mode";
-            jogador.acumulos = 0;
-            break;
+            addToOutput("Admin key: ");
+
+            let testKey = await admKeyUnloak();
+
+            if (testKey != "700162"){
+                alert("Sindrome de deus");
+                addToOutput("--------------");
+                await criarJogador();
+                break;
+
+            }else{
+                jogador.vida = 9223372036854775807;
+                jogador.dano = 9223372036854775807;
+                jogador.escudoTotal = 9223372036854775807;
+                jogador.escudoAtual = jogador.escudoTotal;
+                jogador.vivo = true;
+                jogador.gamemode = "Dev Mode";
+                jogador.acumulos = 0;
+                break;
+            }
+            
 
         case "RDLF":
         case "Rodolfo":
