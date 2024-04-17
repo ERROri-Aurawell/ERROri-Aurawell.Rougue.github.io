@@ -226,8 +226,8 @@ async function matarInimigo(){
     }
 }
 
-function fugir() {
-    tomarDano();
+async function fugir() {
+   await tomarDano();
     inimigoAtual = null;
     tierInimigo();
 }
@@ -470,12 +470,15 @@ async function colocarPontos() {
         ) {
             addToOutput("");
             addToOutput("Pontuação excede limite máximo atual: " + inimigosMortos * 5);
-        } else {
+
+        } else if (Number.isFinite(verificarDano) && Number.isFinite(verificarVida) && Number.isFinite(verificarEscudo)) {
             jogador.vida += verificarVida;
             jogador.dano += verificarDano;
             jogador.escudoTotal += verificarEscudo;
             jogador.escudoAtual = jogador.escudoTotal;
             pontosColocados = true;
+        }else{
+            addToOutput('Algo não é um número!');
         }
     }
     pontosExtras = 0;
@@ -577,7 +580,7 @@ async function iniciarJogo() {
                 }
 
                 if (inimigoAtual.vivo && (jogador.vivo || jogador.nome === "Blade")) {
-                    tomarDano();
+                    await tomarDano();
                 }
             } else {
                 await colocarPontos();
@@ -724,14 +727,17 @@ async function criarJogador() {
                 addToOutput("Digite seus pontos em VIDA, DANO e ESCUDO (20 pontos):");
                 addToOutput("VIDA:");
                 let verificarVida = parseInt(await handleEntradaDados());
+                console.log(verificarVida);
                 addToOutput("DANO:");
                 let verificarDano = parseInt(await handleEntradaDados());
+                console.log(verificarDano);
                 addToOutput("ESCUDO:");
                 let verificarEscudo = parseInt(await handleEntradaDados());
+                console.log(verificarEscudo);
 
                 if (verificarDano + verificarEscudo + verificarVida > 20 || verificarDano < 0 || verificarEscudo < 0 || verificarVida <= 0) {
                     alert("Pontuação inválida!");
-                } else {
+                } else if (Number.isFinite(verificarDano) && Number.isFinite(verificarVida) && Number.isFinite(verificarEscudo)) {
                     jogador.vida = verificarVida;
                     jogador.dano = verificarDano;
                     jogador.escudoTotal = verificarEscudo;
@@ -739,6 +745,8 @@ async function criarJogador() {
                     jogador.gamemode = "normal";
                     pontosColocados = true;
                     jogador.vivo = true;
+                }else{
+                    alert("Algo não é um número!");
                 }
             }
             break;
